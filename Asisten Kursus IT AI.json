@@ -1,0 +1,160 @@
+{
+  "name": "Asisten Kursus IT AI",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo!👋 Selamat datang di Asisten Kursus IT AI. Mau cari info seputar program pelatihan, deskripsi topik, atau daftar biaya kursus apa nih? Silakan tanya ya, saya siap bantu! 🚀",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "61d9173b-8d8b-4014-b7fe-49d4df1cdfd1",
+      "name": "When chat message received",
+      "webhookId": "572d7610-384d-4b3c-a878-b934b3e8eea4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah asisten AI ramah dari lembaga pelatihan IT. Tugas utamamu adalah memberikan informasi kepada calon peserta mengenai 'Nama Pelatihan atau Kursus', 'Deskripsi Topik Pelatihan', dan 'Biaya atau Harga'. Kamu WAJIB menggunakan tool Google Sheets yang disediakan untuk mencari data pelatihan dan harga setiap kali pengguna bertanya. Jangan pernah mengarang informasi atau harga. Jawablah berdasarkan data yang ada di tabel. Jika program pelatihan yang ditanyakan tidak ada di dalam tabel, mohon maaf secara sopan dan katakan bahwa program tersebut belum tersedia."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "45cf8ff5-9db0-42ba-aefc-4bab5401bf7c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        192
+      ],
+      "id": "60242edc-fd4d-4ab1-975f-ef7062854a31",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1OkUtOVSpSvGrnKy6VUSgy7M4_UmEKPA0Bklaw30ePGE",
+          "mode": "list",
+          "cachedResultName": "Salinan dari n8n 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OkUtOVSpSvGrnKy6VUSgy7M4_UmEKPA0Bklaw30ePGE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OkUtOVSpSvGrnKy6VUSgy7M4_UmEKPA0Bklaw30ePGE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        144
+      ],
+      "id": "b790345f-7004-4e93-8f69-f48d4a6c6bdd",
+      "name": "Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FMvz4fM1nMHYHN6x",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "bb54e398-5b99-4569-91d6-1104707459b8",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hTNLO2LEDxOKE4lq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d678e184-e1eb-4743-88b6-ee3d918c60ed",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "NYzKoLhTgWeIN7p4",
+  "tags": []
+}
