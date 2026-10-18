@@ -1,0 +1,116 @@
+{
+  "name": "Perpustakaan AI, pembuatan AI tanpa coding",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! 📖 Selamat datang di Layanan Perpustakaan Digital. Aku Pustakawan AI yang siap bantu kamu cek ketersediaan buku, perpanjangan masa pinjam, atau cari referensi tugas. Ada yang bisa dibantu hari ini?",
+        "options": {}
+      },
+      "id": "cd0d3515-d059-4346-8e47-3d0d47ab2a03",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "00ff60c2-92f8-4783-99d6-8d44f95a56ab"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah asisten perpustakaan digital cerdas. Tugas utamamu adalah membantu pengguna menemukan koleksi buku, artikel ilmiah, informasi tata tertib perpustakaan, status peminjaman, serta memberikan rekomendasi bahan pustaka yang relevan. Jika pengguna menanyakan hal di luar topik perpustakaan, buku, atau akademik, arahkan mereka kembali ke topik literatur dan perpustakaan secara sopan."
+        }
+      },
+      "id": "3ce89b06-808f-4890-85fa-3103baf1d1a0",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        192,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6e09f7b2-fdae-43ca-8fbf-50a4b99b5c70",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        384,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        208
+      ],
+      "id": "180245a9-03b9-4aea-ad1c-28ce2bf46364",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hTNLO2LEDxOKE4lq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9b0a169f-2e9d-46a5-a28f-57148d6d3a32",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "pCOEoroRjyDYeuW6",
+  "tags": []
+}
